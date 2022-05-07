@@ -1,0 +1,17 @@
+{
+  "assets": {
+    "TS": 654,
+    "RCT": 105,
+    "FA12": 4
+  },
+  "weights": {
+    "TS": 65,
+    "RCT": 25,
+    "FA12": 10
+  },
+  "tokens": {
+    "TS": "KT1CaWSNEnU6RR9ZMSSgD5tQtQDqdpw4sG83",
+    "RCT": "KT1QGgr6k1CDf4Svd18MtKNQukboz8JzRPd5",
+    "FA12": "KT1Dr8Qf9at75uEvwN4QnGTNFfPMAr8KL4kK"
+  }
+}
