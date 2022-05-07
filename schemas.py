@@ -1,5 +1,5 @@
 import datetime as dt
-from typing import Optional
+from typing import Optional, Dict
 
 from pydantic import BaseModel
 
@@ -20,3 +20,9 @@ class PoolSpec(BaseModel):
     fee_factor: int
     tez_to_token_dbg: float
     token_to_tez_dbg: float
+
+
+class PortfolioSpec(BaseModel):
+    assets: Dict[str, int]
+    weights: Dict[str, int]
+    tokens: Optional[Dict[str, str]]

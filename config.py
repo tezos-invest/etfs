@@ -4,6 +4,9 @@ import dotenv
 
 dotenv.load_dotenv()
 
+CONTRACT_ADDRESS= {
+    'hangzhou': 'KT18q4si6YmzJjbgZ3wV7HYfds1E3EbD7tBx'
+}
 
 TZKT_ENDPOINT = os.getenv("TZKT_ENDPOINT", "hangzhou")
 

@@ -135,7 +135,7 @@ class BigMap(Base):
         optional_base_params = ['tags'] + list(cls.pagination_parameters)
         params, parsed_params = cls.prepare_modifiers(kwargs, include=optional_base_params)
         for param in parsed_params.get('tags', []):
-            params[params] = ','.join(params[param])
+            params[param] = ','.join(params[param])
 
         micheline = kwargs.pop('micheline', None)
         if micheline is not None:
