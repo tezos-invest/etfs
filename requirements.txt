@@ -3,7 +3,6 @@ numpy==1.21.1
 pandas==1.4.1
 pystan==2.19.1.1
 convertdate==2.4.0
-prophet==1.0.1
 scipy==1.8.0
 sympy==1.9
 pyarrow==7.0.0
