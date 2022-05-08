@@ -1,5 +1,4 @@
 pytezos==3.3.4
-python-dotenv==0.19.2
 numpy==1.21.1
 pandas==1.4.1
 pystan==2.19.1.1
