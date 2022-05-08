@@ -1,5 +1,6 @@
 pytezos==3.3.4
 python-dotenv==0.19.2
+numpy==1.21.1
 pandas==1.4.1
 pystan==2.19.1.1
 convertdate==2.4.0
@@ -20,3 +21,5 @@ requests==2.27.1
 fastapi==0.75.2
 python-dotenv==0.20.0
 uvicorn==0.17.6
+tabulate==0.8.9
+pytest==7.1.2

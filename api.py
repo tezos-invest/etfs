@@ -8,18 +8,22 @@ import config
 import schemas
 from pools.contract_data import get_etf_portfolio
 from pools.known_pools import find_pools
+from pools.datasources import SpicyaDataSource
+from pools.portfolio import RebalancedPortfolioModel
 
 logger = logging.getLogger(__name__)
 app = FastAPI(title="Tezos ETF")
 
 KNOWN_POOLS: typing.List[schemas.PoolSpec]
+SPICY_SOURCE: SpicyaDataSource
 
 
 @app.on_event("startup")
 async def on_startup():
-    global KNOWN_POOLS
+    global KNOWN_POOLS, SPICY_SOURCE
     # KNOWN_POOLS = [schemas.PoolSpec(**e) for e in find_pools(config.TZKT_ENDPOINT)]
     KNOWN_POOLS = [schemas.PoolSpec(**e) for e in it.islice(find_pools(config.TZKT_ENDPOINT), 2)]
+    SPICY_SOURCE = SpicyaDataSource()
     logger.info("App started")
 
 
@@ -31,6 +35,26 @@ async def on_shutdown():
 @app.get("/pools", response_model=typing.List[schemas.PoolSpec])
 async def get_pools() -> typing.List[schemas.PoolSpec]:
     return KNOWN_POOLS
+
+
+@app.get("/emulate", response_model=schemas.EmulationResult)
+async def emulate(tokens: str, weights: str) -> schemas.EmulationResult:
+    tokens = tokens.split(',')
+    weights = [float(w) for w in weights.split(',')]
+
+    history = SPICY_SOURCE.get_history(tokens)
+    tokens = [SPICY_SOURCE.get_hash(token) for token in tokens]
+    if len(tokens) != len(weights):
+        raise ValueError(f"tokens = {tokens} but weights = {weights} length mismatch")
+
+    token_weights = dict(zip(tokens, weights))
+    emulation_result = RebalancedPortfolioModel(history).emulate(token_weights)
+
+    total = emulation_result['portfolio-totals']
+    return schemas.EmulationResult(result=[
+        schemas.DailyResult(day=day_data['day'], evaluation=day_data['price'])
+        for day_data in total
+    ])
 
 
 def map_v_type(dct, target_type):

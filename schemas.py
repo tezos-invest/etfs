@@ -1,5 +1,5 @@
 import datetime as dt
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 from pydantic import BaseModel
 
@@ -26,3 +26,12 @@ class PortfolioSpec(BaseModel):
     assets: Dict[str, int]
     weights: Dict[str, int]
     tokens: Optional[Dict[str, str]]
+
+
+class DailyResult(BaseModel):
+    day: dt.datetime
+    evaluation: float
+
+
+class EmulationResult(BaseModel):
+    result: List[DailyResult]
