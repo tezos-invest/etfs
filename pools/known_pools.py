@@ -1,3 +1,4 @@
+import pandas as pd
 import json
 import logging
 
@@ -117,11 +118,18 @@ def find_available_pools_for_factory(endpoint, factory):
                     }
 
 
-def find_pools(endpoint):
+def _find_pools(endpoint):
     endpoint_data = QUIPI_DATA[endpoint]
     for f_type, f_addr in endpoint_data['factory'].items():
         yield from find_available_pools_for_factory(endpoint, f_addr)
 
+
+def find_pools(endpoint):
+    all_pools = list(_find_pools(endpoint))
+
+    pools = pd.DataFrame(all_pools)
+    pools = pools.sort_values('lastActivityTime', ascending = False).drop_duplicates('token_symbol')
+    return pools.to_dict(orient = 'records')
 
 def get_token_info(endpoint, addr):
     domain = QUIPI_DATA[endpoint]['endpoint']

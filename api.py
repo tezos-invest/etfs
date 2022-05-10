@@ -22,7 +22,7 @@ SPICY_SOURCE: SpicyaDataSource
 async def on_startup():
     global KNOWN_POOLS, SPICY_SOURCE
     # KNOWN_POOLS = [schemas.PoolSpec(**e) for e in find_pools(config.TZKT_ENDPOINT)]
-    KNOWN_POOLS = [schemas.PoolSpec(**e) for e in it.islice(find_pools(config.TZKT_ENDPOINT), 2)]
+    KNOWN_POOLS = [schemas.PoolSpec(**e) for e in find_pools(config.TZKT_ENDPOINT)]
     SPICY_SOURCE = SpicyaDataSource()
     logger.info("App started")
 
