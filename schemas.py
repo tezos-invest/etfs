@@ -1,7 +1,25 @@
 import datetime as dt
 from typing import Optional, Dict, List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra, StrictStr, Field, validator
+
+
+class Portfolio(BaseModel):
+    class Asset(BaseModel):
+        symbol: str = Field(..., min_length=1)
+        weight: int = Field(..., gt=0, lte=100)
+
+        class Config:
+            extra = Extra.forbid
+            allow_mutation = False
+
+    assets: List[Asset]
+
+    @validator("assets")
+    def check_total_weight(cls, assets: List[Asset]) -> List[Asset]:
+        if sum(asset.weight for asset in assets) != 100:
+            raise ValueError("Invalid portfolio")
+        return assets
 
 
 class PoolSpec(BaseModel):
