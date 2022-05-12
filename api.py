@@ -37,17 +37,13 @@ async def get_pools() -> typing.List[schemas.PoolSpec]:
     return KNOWN_POOLS
 
 
-@app.get("/emulate", response_model=schemas.EmulationResult)
-async def emulate(tokens: str, weights: str) -> schemas.EmulationResult:
-    tokens = tokens.split(',')
-    weights = [float(w) for w in weights.split(',')]
+@app.post("/emulate", response_model=schemas.EmulationResult)
+async def emulate(portfolio: schemas.Portfolio) -> schemas.EmulationResult:
+    symbols = [asset.symbol for asset in portfolio.assets]
+    history = SPICY_SOURCE.get_history(symbols)
+    tokens = [SPICY_SOURCE.get_hash(symbol) for symbol in symbols]
 
-    history = SPICY_SOURCE.get_history(tokens)
-    tokens = [SPICY_SOURCE.get_hash(token) for token in tokens]
-    if len(tokens) != len(weights):
-        raise ValueError(f"tokens = {tokens} but weights = {weights} length mismatch")
-
-    token_weights = dict(zip(tokens, weights))
+    token_weights = {token: asset.weight for token, asset in zip(tokens, portfolio.assets)}
     emulation_result = RebalancedPortfolioModel(history).emulate(token_weights)
 
     total = emulation_result['portfolio-totals']
