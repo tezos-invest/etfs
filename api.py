@@ -98,4 +98,12 @@ async def get_portfolio(owner: str) -> schemas.PortfolioSpec:
     tokens = portfolio['tokens']
     tokens = {k: v.get('fa12') or v.get('fa2', {}).get('address') for k, v in tokens.items()}
 
-    return schemas.PortfolioSpec(assets=assets, weights=weights, tokens=tokens)
+    token_specs = list()
+    for symbol, asset in assets.items():
+        weight = weights[symbol]
+        token = tokens.get(symbol)
+        token_specs.append(
+            schemas.TokenSpec(symbol=symbol, asset=asset, weight=weight, token=token)
+        )
+
+    return schemas.PortfolioSpec(result = token_specs)

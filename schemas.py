@@ -40,10 +40,15 @@ class PoolSpec(BaseModel):
     token_to_tez_dbg: float
 
 
+class TokenSpec(BaseModel):
+    symbol: str
+    asset: str
+    weight: str
+    token: str
+
+
 class PortfolioSpec(BaseModel):
-    assets: Dict[str, int]
-    weights: Dict[str, int]
-    tokens: Optional[Dict[str, str]]
+    result: List[TokenSpec]
 
 
 class DailyResult(BaseModel):
@@ -54,10 +59,12 @@ class DailyResult(BaseModel):
 class EmulationResult(BaseModel):
     result: List[DailyResult]
 
+
 class OptimizationMetrics(BaseModel):
     profit_percent: float
     volatility: float
     weights: Dict[str, int]
+
 
 class OptimizationResult(BaseModel):
     result: List[OptimizationMetrics]
