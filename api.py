@@ -1,15 +1,15 @@
-import itertools as it
 import logging
 import typing
 
+import pandas as pd
 from fastapi import FastAPI
 
 import config
 import schemas
 from pools.contract_data import get_etf_portfolio
-from pools.known_pools import find_pools
 from pools.datasources import SpicyaDataSource
-from pools.portfolio import RebalancedPortfolioModel
+from pools.known_pools import find_pools
+from portfolios.portfolio import RebalancedPortfolioModel, MarkovitzOptimization
 
 logger = logging.getLogger(__name__)
 app = FastAPI(title="Tezos ETF")
@@ -22,7 +22,17 @@ SPICY_SOURCE: SpicyaDataSource
 async def on_startup():
     global KNOWN_POOLS, SPICY_SOURCE
     # KNOWN_POOLS = [schemas.PoolSpec(**e) for e in find_pools(config.TZKT_ENDPOINT)]
-    KNOWN_POOLS = [schemas.PoolSpec(**e) for e in find_pools(config.TZKT_ENDPOINT)]
+
+    try:
+        logging.info(f'trying to load cached data')
+        pools_data = pd.read_pickle('cached-pools.pkl.gz').to_dict(orient='records')
+    except:
+        logger.warning(f"can't load cached pool data")
+
+        pools_data = find_pools(config.TZKT_ENDPOINT)
+        pd.DataFrame(pools_data).to_pickle('cached-pools.pkl.gz')
+
+    KNOWN_POOLS = [schemas.PoolSpec(**e) for e in pools_data]
     SPICY_SOURCE = SpicyaDataSource()
     logger.info("App started")
 
@@ -51,6 +61,21 @@ async def emulate(portfolio: schemas.Portfolio) -> schemas.EmulationResult:
         schemas.DailyResult(day=day_data['day'], evaluation=day_data['price'])
         for day_data in total
     ])
+
+
+@app.post("/markovitz-optimize", response_model=schemas.OptimizationResult)
+async def emulate(portfolio: schemas.Portfolio) -> schemas.OptimizationResult:
+    symbols = [asset.symbol for asset in portfolio.assets]
+    history = SPICY_SOURCE.get_history(symbols)
+
+    optimization_result = MarkovitzOptimization(history).do_optimize()
+    optimization_result = optimization_result[['profit_percent', 'volatility', 'weights']]
+
+    return schemas.OptimizationResult(
+        result=[
+            schemas.OptimizationMetrics(**metrics) for metrics in optimization_result.to_dict(orient='records')
+        ]
+    )
 
 
 def map_v_type(dct, target_type):

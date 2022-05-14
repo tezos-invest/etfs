@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import logging
 import time
@@ -93,3 +94,39 @@ class SpicyaDataSource:
             dfs.append(symbol_history)
 
         return pd.concat(dfs).sort_values('day').copy()
+
+class YahooDataSource:
+    def __init__(self):
+        pass
+
+    def get_symbol_history(self, stock_id, dropna=True):
+        stock_url = f"https://query1.finance.yahoo.com/v8/finance/chart/{stock_id}?symbol={stock_id}&period1=0&period2=9999999999&interval=1d&includePrePost=true&events=div%2Csplit"
+        parsed = get_json(stock_url, f"can't get history data for {stock_id}")
+
+        if not parsed:
+            return
+
+        dates_list = []
+        for i in parsed['chart']['result'][0]['timestamp']:
+            dates_list.append(datetime.utcfromtimestamp(int(i)).strftime('%d-%m-%Y'))
+
+        Low = parsed['chart']['result'][0]['indicators']['quote'][0]['low']
+        Open = parsed['chart']['result'][0]['indicators']['quote'][0]['open']
+        Volume = parsed['chart']['result'][0]['indicators']['quote'][0]['volume']
+        High = parsed['chart']['result'][0]['indicators']['quote'][0]['high']
+        Close = parsed['chart']['result'][0]['indicators']['quote'][0]['close']
+        Adjusted_Close = parsed['chart']['result'][0]['indicators']['adjclose'][0]['adjclose']
+
+        df = pd.DataFrame(list(zip(dates_list, Low, Open, Volume, High, Close, Adjusted_Close)),
+                          columns=['day', 'low', 'open', 'volume', 'high', 'close', 'aclose'])
+
+        if dropna:
+            df.dropna(subset=['volume'], inplace=True)
+
+        return df
+
+    def get_sp(self,from_date, to_date):
+        res_df = self.get_symbol_history('^GSPC')
+
+        return res_df[(res_df.day<to_date)&res_df.day>=from_date]
+

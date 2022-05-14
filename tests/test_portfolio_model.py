@@ -1,6 +1,7 @@
 import pytest
 import pandas as pd
-from pools.portfolio import RebalancedPortfolioModel
+from portfolios.portfolio import RebalancedPortfolioModel, MarkovitzOptimization
+
 
 
 @pytest.fixture(scope='session')
@@ -19,3 +20,11 @@ def test_evaluation(full_history: pd.DataFrame):
         'KT1LN4LPSqTMS7Sd2CJw4bbDGRkMv2t68Fy9:null':10,
     })
     print(emulation_result)
+
+def test_markovitz(full_history: pd.DataFrame):
+    import logging
+    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
+    optimization = MarkovitzOptimization(full_history)
+
+    pareto_df = optimization.do_optimize()
+    print(pareto_df.to_markdown())

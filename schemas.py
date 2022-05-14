@@ -53,3 +53,11 @@ class DailyResult(BaseModel):
 
 class EmulationResult(BaseModel):
     result: List[DailyResult]
+
+class OptimizationMetrics(BaseModel):
+    profit_percent: float
+    volatility: float
+    weights: Dict[str, str]
+
+class OptimizationResult(BaseModel):
+    result: List[OptimizationMetrics]
