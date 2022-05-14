@@ -18,7 +18,10 @@ def get_etf_portfolio(owner):
         raise ValueError(f"can't find portfolios path in {contract_address}")
 
     bigmap_data = bigmap.BigMapKey.by_bigmap(portfolio_ptr, domain=domain, key=owner)
-    if len(bigmap_data) != 1:
+    if len(bigmap_data)==0:
+        return None
+
+    if len(bigmap_data) > 1:
         raise ValueError(f"multiple bigmap entries for owner = {owner}")
 
     return bigmap_data[0].value

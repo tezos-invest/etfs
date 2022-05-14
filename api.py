@@ -93,6 +93,9 @@ def map_v_type(dct, target_type):
 @app.get("/portfolio", response_model=schemas.PortfolioSpec)
 async def get_portfolio(owner: str) -> schemas.PortfolioSpec:
     portfolio = get_etf_portfolio(owner)
+    if portfolio is None:
+        return schemas.PortfolioSpec(result=[])
+
     assets = map_v_type(portfolio['assets'], int)
     weights = map_v_type(portfolio['weights'], int)
     tokens = portfolio['tokens']
@@ -106,4 +109,4 @@ async def get_portfolio(owner: str) -> schemas.PortfolioSpec:
             schemas.TokenSpec(symbol=symbol, asset=asset, weight=weight, token=token)
         )
 
-    return schemas.PortfolioSpec(result = token_specs)
+    return schemas.PortfolioSpec(result=token_specs)
