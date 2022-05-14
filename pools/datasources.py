@@ -1,3 +1,4 @@
+import hashlib
 from datetime import datetime
 import json
 import logging
@@ -31,6 +32,14 @@ def get_json(json_url, error_msg=""):
             logging.exception(f"attempt {attemp}: {error_msg} for {json_url}")
 
 
+def swap_symbols(symbol, possible_tokens):
+    m = hashlib.md5()
+    m.update(symbol.encode())
+    digest = m.hexdigest()
+    token_idx = int(digest, 16) % len(possible_tokens)
+    return possible_tokens[token_idx]
+
+
 class SpicyaDataSource:
     REST_URL = "https://spicya.sdaotools.xyz/api/rest/"
 
@@ -46,6 +55,9 @@ class SpicyaDataSource:
     def get_hash(self, symbol: str):
         symbol = symbol.lower()
         if symbol not in self.tokens:
+            symbol = swap_symbols(symbol, self.symbols())
+
+        if symbol not in self.tokens:
             raise ValueError(f"symbol {symbol} not found. available symbols = {self.tokens.keys()}")
         return self.tokens[symbol]['tag']
 
@@ -59,6 +71,10 @@ class SpicyaDataSource:
 
     def get_symbol_history(self, symbol):
         symbol = symbol.lower()
+
+        if symbol not in self.tokens:
+            symbol = swap_symbols(symbol, self.symbols())
+
         if symbol not in self.tokens:
             raise ValueError(f"can't find symbol {symbol} in tokens registry")
 
@@ -95,6 +111,7 @@ class SpicyaDataSource:
 
         return pd.concat(dfs).sort_values('day').copy()
 
+
 class YahooDataSource:
     def __init__(self):
         pass
@@ -125,8 +142,7 @@ class YahooDataSource:
 
         return df
 
-    def get_sp(self,from_date, to_date):
+    def get_sp(self, from_date, to_date):
         res_df = self.get_symbol_history('^GSPC')
 
-        return res_df[(res_df.day<to_date)&res_df.day>=from_date]
-
+        return res_df[(res_df.day < to_date) & res_df.day >= from_date]
