@@ -33,7 +33,8 @@ class RebalancedPortfolioModel:
         }
 
         for day, token, price in self.tokens_data[['day', 'token', 'close']].values:
-            emulation_state['current-prices'][token] = price
+            if price > 0:
+                emulation_state['current-prices'][token] = price
             emulation_state['day'] = day
             if len(emulation_state['current-prices']) == len(portfolio_weights):
                 rebalanced = self.do_rebalance(emulation_state)
@@ -49,7 +50,7 @@ class RebalancedPortfolioModel:
         current_prices = emulation_result['current-prices']
         weights = emulation_result['weights']
 
-        need_rebalance = rebalance_day is None or day - rebalance_day > self.rebalance_period
+        need_rebalance = rebalance_day is None or (day - rebalance_day).days > self.rebalance_period
 
         if need_rebalance:
             if portfolio:
@@ -71,6 +72,7 @@ class RebalancedPortfolioModel:
                 'day': day,
                 'price': total,
             })
+            emulation_result['rebalance-day'] = day
 
             return True
 
