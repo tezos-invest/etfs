@@ -3,6 +3,7 @@ import typing
 
 import pandas as pd
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 import config
 import schemas
@@ -13,6 +14,13 @@ from portfolios.portfolio import RebalancedPortfolioModel, MarkovitzOptimization
 
 logger = logging.getLogger(__name__)
 app = FastAPI(title="Tezos ETF")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 KNOWN_POOLS: typing.List[schemas.PoolSpec]
 SPICY_SOURCE: SpicyaDataSource
