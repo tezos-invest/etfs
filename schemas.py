@@ -57,7 +57,7 @@ class EmulationResult(BaseModel):
 class OptimizationMetrics(BaseModel):
     profit_percent: float
     volatility: float
-    weights: Dict[str, str]
+    weights: Dict[str, int]
 
 class OptimizationResult(BaseModel):
     result: List[OptimizationMetrics]

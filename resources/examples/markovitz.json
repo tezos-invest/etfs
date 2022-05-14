@@ -1,0 +1,84 @@
+{
+  "result": [
+    {
+      "profit_percent": 0.00043193103877992023,
+      "volatility": 0.0066864615610237235,
+      "weights": {
+        "KT1CS2xKGHNPTauSh5Re4qE3N9PCfG5u4dPx:0": 2,
+        "KT1PnUZCp3u2KzWr93pn4DD7HAJnm3rWVrgn:0": 98
+      }
+    },
+    {
+      "profit_percent": 0.0008431190966915469,
+      "volatility": 0.013364983781569986,
+      "weights": {
+        "KT1CS2xKGHNPTauSh5Re4qE3N9PCfG5u4dPx:0": 4,
+        "KT1PnUZCp3u2KzWr93pn4DD7HAJnm3rWVrgn:0": 96
+      }
+    },
+    {
+      "profit_percent": 0.0030119484498281057,
+      "volatility": 0.05658745900508175,
+      "weights": {
+        "KT1CS2xKGHNPTauSh5Re4qE3N9PCfG5u4dPx:0": 17,
+        "KT1PnUZCp3u2KzWr93pn4DD7HAJnm3rWVrgn:0": 83
+      }
+    },
+    {
+      "profit_percent": 0.003142728432311337,
+      "volatility": 0.0598991460344236,
+      "weights": {
+        "KT1CS2xKGHNPTauSh5Re4qE3N9PCfG5u4dPx:0": 18,
+        "KT1PnUZCp3u2KzWr93pn4DD7HAJnm3rWVrgn:0": 82
+      }
+    },
+    {
+      "profit_percent": 0.003268375558470815,
+      "volatility": 0.06320900819607937,
+      "weights": {
+        "KT1CS2xKGHNPTauSh5Re4qE3N9PCfG5u4dPx:0": 19,
+        "KT1PnUZCp3u2KzWr93pn4DD7HAJnm3rWVrgn:0": 81
+      }
+    },
+    {
+      "profit_percent": 0.003504286087012032,
+      "volatility": 0.06982329676454417,
+      "weights": {
+        "KT1CS2xKGHNPTauSh5Re4qE3N9PCfG5u4dPx:0": 21,
+        "KT1PnUZCp3u2KzWr93pn4DD7HAJnm3rWVrgn:0": 79
+      }
+    },
+    {
+      "profit_percent": 0.003819749437374176,
+      "volatility": 0.0797312850940193,
+      "weights": {
+        "KT1CS2xKGHNPTauSh5Re4qE3N9PCfG5u4dPx:0": 24,
+        "KT1PnUZCp3u2KzWr93pn4DD7HAJnm3rWVrgn:0": 76
+      }
+    },
+    {
+      "profit_percent": 0.004583819149658552,
+      "volatility": 0.11592645828318492,
+      "weights": {
+        "KT1CS2xKGHNPTauSh5Re4qE3N9PCfG5u4dPx:0": 35,
+        "KT1PnUZCp3u2KzWr93pn4DD7HAJnm3rWVrgn:0": 65
+      }
+    },
+    {
+      "profit_percent": 0.004728228983585492,
+      "volatility": 0.1323115131620747,
+      "weights": {
+        "KT1CS2xKGHNPTauSh5Re4qE3N9PCfG5u4dPx:0": 40,
+        "KT1PnUZCp3u2KzWr93pn4DD7HAJnm3rWVrgn:0": 60
+      }
+    },
+    {
+      "profit_percent": 0.00475299101646387,
+      "volatility": 0.14539037890343245,
+      "weights": {
+        "KT1CS2xKGHNPTauSh5Re4qE3N9PCfG5u4dPx:0": 44,
+        "KT1PnUZCp3u2KzWr93pn4DD7HAJnm3rWVrgn:0": 56
+      }
+    }
+  ]
+}
