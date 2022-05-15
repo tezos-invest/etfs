@@ -85,7 +85,8 @@ async def emulate(portfolio: schemas.Portfolio) -> schemas.OptimizationResult:
 
     for profit_percent, volatility, weights in optimization_result.values:
         new_weights = {hashes_map[hash_key]: value for hash_key, value in weights.items()}
-        result.append(schemas.OptimizationMetrics(profit_percent=profit_percent, volatility=volatility, weights=new_weights))
+        result.append(
+            schemas.OptimizationMetrics(profit_percent=profit_percent, volatility=volatility, weights=new_weights))
 
     return schemas.OptimizationResult(result=result)
 
@@ -95,8 +96,8 @@ def map_v_type(dct, target_type):
 
 
 @app.get("/portfolio", response_model=schemas.PortfolioSpec)
-async def get_portfolio(owner: str) -> schemas.PortfolioSpec:
-    portfolio = get_etf_portfolio(owner)
+async def get_portfolio(owner: str, contract_address: str) -> schemas.PortfolioSpec:
+    portfolio = get_etf_portfolio(owner, contract_address)
     if portfolio is None:
         return schemas.PortfolioSpec(result=[])
 

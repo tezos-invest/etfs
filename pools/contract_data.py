@@ -3,9 +3,8 @@ from pools.known_pools import QUIPI_DATA
 from tzktpy import bigmap
 
 
-def get_etf_portfolio(owner):
+def get_etf_portfolio(owner, contract_address):
     domain = QUIPI_DATA[config.TZKT_ENDPOINT]['endpoint']
-    contract_address = config.CONTRACT_ADDRESS[config.TZKT_ENDPOINT]
     # contract_storage = json.loads(contract.Contract.storage())
     result = bigmap.BigMap.by_contract(contract_address, domain=domain)
     portfolio_ptr = None
