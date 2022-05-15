@@ -84,7 +84,7 @@ def volatility(day_prices, full_period_len=252):
     https://www.macroption.com/historical-volatility-calculation/
     https://dynamiproject.files.wordpress.com/2016/01/measuring_historic_volatility.pdf
 
-    :param day_prices: отсортированные по дням дневные close цены
+    :param day_prices: sorted closes
     :param period_len:
     :param full_period_len:
 
@@ -149,7 +149,7 @@ class MarkovitzOptimization:
         points_df = points_df[predicate].copy()
 
         pareto_data = points_df[['profit_percent', 'volatility']].values
-        # Оставляем только эффективные по парето точки
+        # retain pareto-frontier
         pareto_mask = is_pareto_efficient(pareto_data)
 
         pareto_points = points_df[pareto_mask].copy()

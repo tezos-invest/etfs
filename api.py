@@ -76,14 +76,18 @@ async def emulate(portfolio: schemas.Portfolio) -> schemas.OptimizationResult:
     symbols = [asset.symbol for asset in portfolio.assets]
     history = SPICY_SOURCE.get_history(symbols)
 
+    hashes_map = {SPICY_SOURCE.get_hash(symbol): symbol for symbol in symbols}
+
     optimization_result = MarkovitzOptimization(history).do_optimize()
     optimization_result = optimization_result[['profit_percent', 'volatility', 'weights']]
 
-    return schemas.OptimizationResult(
-        result=[
-            schemas.OptimizationMetrics(**metrics) for metrics in optimization_result.to_dict(orient='records')
-        ]
-    )
+    result = list()
+
+    for profit_percent, volatility, weights in optimization_result.values:
+        new_weights = {hashes_map[hash_key]: value for hash_key, value in weights.items()}
+        result.append(schemas.OptimizationMetrics(profit_percent=profit_percent, volatility=volatility, weights=new_weights))
+
+    return schemas.OptimizationResult(result=result)
 
 
 def map_v_type(dct, target_type):
