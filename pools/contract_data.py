@@ -1,7 +1,6 @@
-import json
-from tzktpy import contract, bigmap
-from pools.known_pools import QUIPI_DATA
 import config
+from pools.known_pools import QUIPI_DATA
+from tzktpy import bigmap
 
 
 def get_etf_portfolio(owner):
@@ -18,7 +17,7 @@ def get_etf_portfolio(owner):
         raise ValueError(f"can't find portfolios path in {contract_address}")
 
     bigmap_data = bigmap.BigMapKey.by_bigmap(portfolio_ptr, domain=domain, key=owner)
-    if len(bigmap_data)==0:
+    if len(bigmap_data) == 0:
         return None
 
     if len(bigmap_data) > 1:

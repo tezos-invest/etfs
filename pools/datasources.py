@@ -10,7 +10,7 @@ import urllib.request
 import pandas as pd
 
 
-# известные источники
+# known sources
 # https://blog.rmotr.com/top-5-free-apis-to-access-historical-cryptocurrencies-data-2438adc8b62
 # https://finance.yahoo.com/quote/XTZ-USD?p=XTZ-USD
 
@@ -37,7 +37,9 @@ def swap_symbols(symbol, possible_tokens):
     m.update(symbol.encode())
     digest = m.hexdigest()
     token_idx = int(digest, 16) % len(possible_tokens)
-    return possible_tokens[token_idx]
+    res_symbol = possible_tokens[token_idx]
+    logging.info(f'swapping symbol {symbol}->{res_symbol}')
+    return res_symbol
 
 
 class SpicyaDataSource:
@@ -87,6 +89,15 @@ class SpicyaDataSource:
         result_df = pd.DataFrame(day_data)
         result_df["day"] = pd.to_datetime(result_df["day"])
         result_df['token'] = result_df['tag']
+        if len(result_df)>0 and set(result_df['derivedxtz_low'].unique())=={0}:
+            result_df['derivedxtz_low'] = 1
+            result_df['derivedxtz_high'] = 1
+            result_df['derivedxtz_open'] = 1
+            result_df['derivedxtz_close'] = 1
+
+        result_df = result_df[result_df['derivedxtz_low']>0]
+        if len(result_df)==0:
+            logging.info(f'no data for {symbol}')
         result_df.sort_values("day", inplace=True)
 
         result_df.rename(

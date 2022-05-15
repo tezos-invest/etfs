@@ -1,7 +1,7 @@
 import datetime as dt
 from typing import Optional, Dict, List
 
-from pydantic import BaseModel, Extra, StrictStr, Field, validator
+from pydantic import BaseModel, Extra, Field, validator
 
 
 class Portfolio(BaseModel):

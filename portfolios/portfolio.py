@@ -83,7 +83,7 @@ def volatility(day_prices, full_period_len=252):
     """
     https://www.macroption.com/historical-volatility-calculation/
     https://dynamiproject.files.wordpress.com/2016/01/measuring_historic_volatility.pdf
-    !больше вариантов расчета устойчивых форм волатильности 252 торговых дня в году
+
     :param day_prices: отсортированные по дням дневные close цены
     :param period_len:
     :param full_period_len:
@@ -141,7 +141,7 @@ class MarkovitzOptimization:
 
         points, metrics = zip(*history)
 
-        # Убираем заведомо неэффективные точки
+        # drop unefficient points
         points_df = pd.DataFrame(map(lambda x: x.metrics, metrics))
 
         predicate = points_df['profit_percent'] > 0
